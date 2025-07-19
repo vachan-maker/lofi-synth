@@ -1,4 +1,4 @@
-import { Music } from "lucide-react";
+import { Music, ArrowRight } from "lucide-react";
 import { Icon } from "lucide-react";
 import { motion } from "framer-motion";
 export default function Hero() {
@@ -21,22 +21,32 @@ export default function Hero() {
 
                 </motion.h1>
                 <p className="text-3xl text-gray-600">Upload your track. Choose your vibe. Let AI remix it instantly.</p>
-                <div className="flex flex-row justify-center px-4 mt-5">
-                                    <label
-                    htmlFor="file-upload"
-                    className="bg-gradient-to-r from-purple-400 to-pink-500 rounded-full text-white py-2 px-2 flex-1 flex flex-row items-center gap-4 justify-center cursor-pointer hover:scale-95"
-                >
-                    Upload Audio
-                </label>
-                <input
-                    id="file-upload"
-                    type="file"
-                    className="hidden"
-                />
-                    <input type="text" placeholder="Describe your vibe!......." className="bg-white rounded-full flex-1/2 px-2 py-2"></input>
-
-
-                </div>
+                <form className="flex flex-row justify-center px-4 mt-5 gap-4">
+                    <label
+                        htmlFor="file-upload"
+                        className="bg-gradient-to-r from-purple-400 to-pink-500 rounded-full text-white py-3 px-6 flex items-center justify-center cursor-pointer hover:scale-95 transition-transform"
+                    >
+                        Upload Audio
+                    </label>
+                    <input
+                        id="file-upload"
+                        type="file"
+                        className="hidden"
+                    />
+                    <div className="relative flex-grow max-w-lg">
+                        <input 
+                            type="text" 
+                            placeholder="Describe your vibe!......." 
+                            className="bg-white rounded-full w-full pl-6 pr-16 py-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-400"
+                        />
+                        <button 
+                            type="submit" 
+                            className="cursor-pointer absolute top-1/2 right-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center text-white bg-purple-500 rounded-full hover:bg-purple-600 transition-colors"
+                        >
+                            <ArrowRight className="w-6 h-6" />
+                        </button>
+                    </div>
+                </form>
                 <p className="mt-10 text-gray-600">Powered by AI</p>
             </section>
         </div>
