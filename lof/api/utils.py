@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from PIL import Image
 import requests
 import json
-
+const API_KEY = os.getenv("SUNO")
 def generate_lofi_prompt(image_path):
     load_dotenv()
     api_key = os.getenv("GOOGLE_API_KEY")
@@ -36,18 +36,37 @@ def generate_lofi_prompt(image_path):
             "instrumental": True,
             "model": "V3_5",
             "negativeTags": "Heavy Metal, Upbeat Drums",
-            "api_key":os.getenv("SUNO")
+            "callBackUrl":'https://api.example.com/callback'
         })
         print(payload)
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': 'Bearer <your-actual-token>'  # Replace with real token
+            'Authorization': f'Bearer {os.getenv("SUNO")}'  # Replace with real token
         }
 
         suno_response = requests.post(url, headers=headers, data=payload)
         
         # Return structured JSON response
+        while True:
+            status_resp = requests.get(f"{BASE_URL}/v1/music/status/{task_id}", headers=headers)
+            status_resp.raise_for_status()
+            status_data = status_resp.json()
+
+            status = status_data.get("status")
+            if status == "completed":
+                audio_url = status_data["result"]["audio_url"]
+                print("✅ Completed! Audio URL:", audio_url)
+                break
+            elif status == "failed":
+                error = status_data.get("error", "Unknown reason")
+                print("❌ Failed:", error)
+                break
+            else:
+                print(f"⏳ Current status: {status}")
+                time.sleep(5)  # adjust as needed
+
+
         result = {
             "success": True,
             "prompt": response.text,
