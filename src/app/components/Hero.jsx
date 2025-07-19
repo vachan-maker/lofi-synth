@@ -22,8 +22,17 @@ export default function Hero() {
                 </motion.h1>
                 <p className="text-3xl text-gray-600">Upload your track. Choose your vibe. Let AI remix it instantly.</p>
                 <div className="flex flex-row justify-center px-4 mt-5">
-                    <input type="file" className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white border-2 py-2 px-2 flex-1 flex flex-row items-center gap-4 justify-center" id
-                    ="song"></input>
+                                    <label
+                    htmlFor="file-upload"
+                    className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white py-2 px-2 flex-1 flex flex-row items-center gap-4 justify-center cursor-pointer hover:scale-95"
+                >
+                    Upload an Image
+                </label>
+                <input
+                    id="file-upload"
+                    type="file"
+                    className="hidden"
+                />
                     <input type="text" placeholder="Describe your vibe!......." className="bg-white rounded-full flex-1/2 px-2 py-2"></input>
 
 
