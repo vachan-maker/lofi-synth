@@ -9,7 +9,7 @@ export default function ImageUpload() {
                     <div>
                         <form action="/upload" method="POST">
                 <label
-                    for="file-upload"
+                    htmlFor="file-upload"
                     className="inline-block cursor-pointer bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:scale-95"
                 >
                     Upload an Image
