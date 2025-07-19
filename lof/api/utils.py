@@ -21,4 +21,7 @@ def generate_lofi_prompt(image_path):
     )
     model = genai.GenerativeModel('gemini-1.5-flash')
     response = model.generate_content([prompt, img])
+    print("\n🪄 Generated Lofi Prompt:")
+    print(response.text)
+    
     return response.text
