@@ -5,7 +5,7 @@ export default function Hero() {
     <div className="min-h-screen transition-colors">
         <section className="container mx-auto px-8 py-20 text-center max-w-5xl">
       <h1
-        className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent leading-tight"
+        className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent leading-tight animate-pulse"
         style={{ opacity: 1, transform: "none" }}
       >
         Turn Any Song into
