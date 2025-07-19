@@ -4,6 +4,7 @@
 import { useEffect, useState } from 'react';
 import Hero from "./components/Hero";
 // Removed unused 'Image' and 'Header' imports
+import Header from './components/Header';
 
 export default function Home() {
   const [msg, setMsg] = useState('Loading...'); // Set an initial loading message
@@ -19,9 +20,11 @@ export default function Home() {
   }, []);
 
   return (
+    <>
+    <Header/>
     <main>
       <Hero />
-      <h1>API Message: {msg}</h1> {/* Display the fetched message */}
     </main>
+    </>
   );
 }
