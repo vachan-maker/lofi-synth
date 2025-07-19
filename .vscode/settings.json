@@ -2,6 +2,12 @@
     "python.defaultInterpreterPath": "C:\\Python313\\python.exe",
     "python.terminal.activateEnvironment": true,
     "python.analysis.extraPaths": [
-        "./lof"
-    ]
+        "./lof",
+        "C:\\Users\\sabuv\\AppData\\Roaming\\Python\\Python313\\site-packages",
+        "C:\\Users\\sabuv\\Downloads\\archive (2)\\Hackgen\\lofi-synth\\lof\\Lib\\site-packages"
+    ],
+    "python.analysis.autoSearchPaths": true,
+    "python.analysis.diagnosticMode": "workspace",
+    "pylsp.plugins.pycodestyle.enabled": false,
+    "python.linting.enabled": false
 }
