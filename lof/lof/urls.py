@@ -10,4 +10,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home,name="home"),
     path('api/auth/',views.login_api),
+    path('api/', include('api.urls')),
 ]

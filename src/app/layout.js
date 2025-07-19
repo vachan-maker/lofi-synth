@@ -1,3 +1,4 @@
+
 import { AuthProvider } from './context/AuthContext'
 import './globals.css'
 
