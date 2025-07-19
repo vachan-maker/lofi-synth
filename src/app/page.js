@@ -6,6 +6,7 @@ import Hero from "./components/Hero";
 import HowItWorks from './components/HowItWorks';
 import ChooseYourVibe from './components/ChooseYourVibe';
 import ImageUpload from './components/ImageUpload';
+import WhyLofiSynth from './components/WhyLofiSynth';
 
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
       <Hero />
       <HowItWorks/>
       <ImageUpload/>
+      <WhyLofiSynth/>
     </main>
     </>
   );
