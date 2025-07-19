@@ -36,6 +36,7 @@ def generate_lofi_prompt(image_path):
             "instrumental": True,
             "model": "V3_5",
             "negativeTags": "Heavy Metal, Upbeat Drums",
+            "api_key":os.getenv("SUNO")
         })
         print(payload)
         headers = {
