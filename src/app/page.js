@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 // page.js
 'use client'; // Declare this as a Client Component
 
+=======
+'use client';
+>>>>>>> e507c35fbcb5fce1d98d9a4bcd9833c36a5ba3ca
 import { useEffect, useState } from 'react';
 import Hero from "./components/Hero";
 // Removed unused 'Image' and 'Header' imports
