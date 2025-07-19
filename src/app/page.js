@@ -8,6 +8,7 @@ import Header from './components/Header';
 import ReactRain from 'react-rain-animation';
 import HowItWorks from './components/HowItWorks';
 import ChooseYourVibe from './components/ChooseYourVibe';
+import ImageUpload from './components/ImageUpload';
 
 
 export default function Home() {
@@ -43,6 +44,7 @@ export default function Home() {
     <main>
       <Hero />
       <HowItWorks/>
+      <ImageUpload/>
     </main>
     </>
   );
