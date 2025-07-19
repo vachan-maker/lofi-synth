@@ -9,7 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-rose-200 via-purple-300 to-indigo-400">
+      <body className="min-h-screen transition-colors duration-500 bg-gradient-to-br from-rose-200 via-purple-100 to-white">
         <AuthProvider>
           {children}
         </AuthProvider>

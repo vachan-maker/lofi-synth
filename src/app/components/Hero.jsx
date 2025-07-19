@@ -24,9 +24,9 @@ export default function Hero() {
                 <div className="flex flex-row justify-center px-4 mt-5">
                                     <label
                     htmlFor="file-upload"
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white py-2 px-2 flex-1 flex flex-row items-center gap-4 justify-center cursor-pointer hover:scale-95"
+                    className="bg-gradient-to-r from-purple-400 to-pink-500 rounded-full text-white py-2 px-2 flex-1 flex flex-row items-center gap-4 justify-center cursor-pointer hover:scale-95"
                 >
-                    Upload an Image
+                    Upload Audio
                 </label>
                 <input
                     id="file-upload"
