@@ -3,7 +3,7 @@ import { Icon } from "lucide-react";
 import { motion } from "framer-motion";
 export default function Hero() {
     return (
-        <div className="min-h-screen transition-colors">
+        <div className="min-h-1/2 transition-colors">
             <section className="container mx-auto px-8 py-20 text-center max-w-5xl">
                 <motion.h1
                     initial={{ opacity: 0, y: 50 }}
