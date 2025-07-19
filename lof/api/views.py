@@ -12,7 +12,8 @@ def upload_image(request):
         if 'file' not in request.FILES:
             return JsonResponse({'success': False, 'error': 'No file provided'}, status=400)
 
-        file = request.FILES['file']
+        file = request.FILES.get('file')
+        print(file)
         filename = default_storage.save(f"uploads/{file.name}", ContentFile(file.read()))
         file_path = os.path.join(default_storage.location, filename)
 

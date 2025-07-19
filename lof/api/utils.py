@@ -37,6 +37,7 @@ def generate_lofi_prompt(image_path):
             "model": "V3_5",
             "negativeTags": "Heavy Metal, Upbeat Drums",
         })
+        print(payload)
         headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
@@ -52,7 +53,7 @@ def generate_lofi_prompt(image_path):
             "audioResponse": suno_response.json() if suno_response.headers.get('content-type', '').startswith('application/json') else suno_response.text,
             "audioUrl": None  # Extract from suno_response based on API docs
         }
-        
+        print(result)
         return json.dumps(result)
         
     except Exception as e:
