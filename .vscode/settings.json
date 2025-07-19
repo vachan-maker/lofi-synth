@@ -1,7 +1,13 @@
 {
-    "python.defaultInterpreterPath": "C:\\Python313\\python.exe",
+    "python.defaultInterpreterPath": "py",
     "python.terminal.activateEnvironment": true,
     "python.analysis.extraPaths": [
         "./lof"
-    ]
+    ],
+    "terminal.integrated.profiles.windows": {
+        "PowerShell": {
+            "source": "PowerShell",
+            "args": ["-Command", "py"]
+        }
+    }
 }
