@@ -1,8 +1,13 @@
-'use client';
+
+// page.js
+'use client'; // Declare this as a Client Component
 import { useEffect, useState } from 'react';
-import Image from "next/image";
 import Hero from "./components/Hero";
-import Header from "./components/Header";
+// Removed unused 'Image' and 'Header' imports
+import Header from './components/Header';
+import ReactRain from 'react-rain-animation';
+
+
 export default function Home() {
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(true);
@@ -33,14 +38,15 @@ export default function Home() {
   return (
     <>
       <Header/>
-      <Hero/>
-      <div style={{ padding: '20px', textAlign: 'center' }}>
-        <h2>Django API Response:</h2>
-        {loading && <p>Loading...</p>}
-        {error && <p style={{ color: 'red' }}>Error: {error}</p>}
-        {msg && <p style={{ color: 'green', fontSize: '18px' }}>{msg}</p>}
-      </div>
+      <main>
+        <Hero />
+        <div style={{ padding: '20px', textAlign: 'center' }}>
+          <h2>Django API Response:</h2>
+          {loading && <p>Loading...</p>}
+          {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+          {msg && <p style={{ color: 'green', fontSize: '18px' }}>{msg}</p>}
+        </div>
+      </main>
     </>
   );
 }
-
