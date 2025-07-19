@@ -8,6 +8,6 @@ def home(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home),
+    path('', home,name="home"),
     path('api/auth/',views.login_api),
 ]

@@ -55,7 +55,7 @@ export default function LogIn() {
       if (response.ok) {
         localStorage.setItem("access_token", data.access);
         localStorage.setItem("refresh_token", data.refresh);
-        router.push("/dashboard");
+        router.push("/");
       } else {
         setError(data.error || "Login failed");
       }
