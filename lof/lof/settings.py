@@ -72,7 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lof.wsgi.application'
-
+LOGIN_REDIRECT_URL = '/'  # or 'home' if you're using named routes
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases

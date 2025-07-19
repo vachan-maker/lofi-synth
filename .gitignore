@@ -86,3 +86,6 @@ lof/Scripts/
 lof/Include/
 lof/share/
 lof/pyvenv.cfg
+
+
+/venv
