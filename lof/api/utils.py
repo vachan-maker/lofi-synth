@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from PIL import Image
 import requests
 import json
-const API_KEY = os.getenv("SUNO")
+API_KEY = os.getenv("SUNO")
 def generate_lofi_prompt(image_path):
     load_dotenv()
     api_key = os.getenv("GOOGLE_API_KEY")
@@ -25,6 +25,7 @@ def generate_lofi_prompt(image_path):
         )
         model = genai.GenerativeModel('gemini-1.5-flash')
         response = model.generate_content([prompt, img])
+        print(response.text)
         
         # Call Suno API
         url = "https://api.sunoapi.org/api/v1/generate"
