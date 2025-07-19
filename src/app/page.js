@@ -6,6 +6,7 @@ import Hero from "./components/Hero";
 // Removed unused 'Image' and 'Header' imports
 import Header from './components/Header';
 import ReactRain from 'react-rain-animation';
+import HowItWorks from './components/HowItWorks';
 
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
     <Header/>
     <main>
       <Hero />
+      <HowItWorks/>
     </main>
     </>
   );
