@@ -5,6 +5,8 @@ import { useEffect, useState } from 'react';
 import Hero from "./components/Hero";
 // Removed unused 'Image' and 'Header' imports
 import Header from './components/Header';
+import ReactRain from 'react-rain-animation';
+
 
 export default function Home() {
   const [msg, setMsg] = useState('Loading...'); // Set an initial loading message
