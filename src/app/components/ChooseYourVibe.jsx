@@ -1,4 +1,6 @@
 import { motion } from "framer-motion"
+import { Upload } from 'lucide-react';
+
 
 export default function ChooseYourVibe() {
     return (
