@@ -20,10 +20,6 @@ export default function Hero() {
                     </div>
 
                 </motion.h1>
-                 <div
-                            className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"
-                            style={{ transform: "none" }}
-                        ></div>
                 <p className="text-3xl text-gray-600">Upload your track. Choose your vibe. Let AI remix it instantly.</p>
                 <div className="flex flex-row justify-center px-4 mt-5">
                     <button className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-full text-white border-2 py-2 px-2 flex-1 flex flex-row items-center gap-4 justify-center"><Music color="white" />Upload Music</button>
