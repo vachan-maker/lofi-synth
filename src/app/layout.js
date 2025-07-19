@@ -4,6 +4,9 @@ import './globals.css'
 export const metadata = {
   title: 'Lofi Synth',
   description: 'Your music app',
+  icons: {
+    icon: '/icon1.png',
+  },
 }
 
 export default function RootLayout({ children }) {
