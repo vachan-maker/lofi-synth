@@ -1,3 +1,4 @@
+import Header from "../components/Header";
 export default function Header() {
     return (
         <header className="w-full py-6 px-12 flex justify-between">

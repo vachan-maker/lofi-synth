@@ -1,20 +1,27 @@
-'use client';
+
+// page.js
+'use client'; // Declare this as a Client Component
 import { useEffect, useState } from 'react';
-import Image from "next/image";
 import Hero from "./components/Hero";
-import Header from "./components/Header";
+// Removed unused 'Image' and 'Header' imports
+
 export default function Home() {
-  const [msg, setMsg] = useState('');
+  const [msg, setMsg] = useState('Loading...'); // Set an initial loading message
+
   useEffect(() => {
     fetch('http://localhost:8000/api/hello/')
       .then(res => res.json())
-      .then(data => setMsg(data.message));
+      .then(data => setMsg(data.message))
+      .catch(err => {
+        console.error("Failed to fetch message:", err);
+        setMsg("Failed to load message."); // Set an error message
+      });
   }, []);
+
   return (
-    <>
-  <Header/>
-  <Hero/>
-  </>
+    <main>
+      <Hero />
+      <h1>API Message: {msg}</h1> {/* Display the fetched message */}
+    </main>
   );
 }
-
