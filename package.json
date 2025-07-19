@@ -9,16 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "@react-spring/web": "^10.0.1",
-=======
     "next": "^15.4.2",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
->>>>>>> 75fe6cf358c53d72810b6d5189eb058582c5078c
     "lucide-react": "^0.525.0",
-    "next": "15.4.2",
-    "react": "19.1.0",
     "react-dom": "19.1.0",
     "react-rain-animation": "^1.0.4"
   },
