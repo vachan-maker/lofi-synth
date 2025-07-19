@@ -1,6 +1,8 @@
 {
     "python.defaultInterpreterPath": "C:\\Python313\\python.exe",
+    "python.pythonPath": "C:\\Python313\\python.exe",
     "python.terminal.activateEnvironment": true,
+    "python.terminal.executeInFileDir": true,
     "python.analysis.extraPaths": [
         "./lof",
         "C:\\Users\\sabuv\\AppData\\Roaming\\Python\\Python313\\site-packages",
@@ -8,6 +10,10 @@
     ],
     "python.analysis.autoSearchPaths": true,
     "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.indexing": true,
     "pylsp.plugins.pycodestyle.enabled": false,
-    "python.linting.enabled": false
+    "python.linting.enabled": false,
+    "terminal.integrated.env.windows": {
+        "PYTHONPATH": "C:\\Users\\sabuv\\Downloads\\archive (2)\\Hackgen\\lofi-synth\\lof;C:\\Users\\sabuv\\AppData\\Roaming\\Python\\Python313\\site-packages"
+    }
 }
