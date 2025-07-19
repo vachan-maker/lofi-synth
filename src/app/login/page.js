@@ -13,7 +13,6 @@ import { Orbitron } from "next/font/google";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { useAuth } from "../context/AuthContext";
 
 const orbitron = Orbitron({
   subsets: ["latin"],
@@ -32,7 +31,6 @@ export default function LogIn() {
   const [resetMessage, setResetMessage] = useState("");
 
   const router = useRouter();
-  const { loginAction } = useAuth();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -46,12 +44,20 @@ export default function LogIn() {
     }
 
     try {
-      const result = await loginAction({ username, password });
-      
-      if (result && result.success !== false) {
+      const response = await fetch(`${API_URL}/api/auth/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("access_token", data.access);
+        localStorage.setItem("refresh_token", data.refresh);
         router.push("/");
       } else {
-        setError(result?.error || "Login failed");
+        setError(data.error || "Login failed");
       }
     } catch (err) {
       console.error("Login error:", err);
