@@ -1,98 +1,91 @@
-import sys
-import google.generativeai as genai
 import os
+import sys
+import time
+import json
+import requests
 from dotenv import load_dotenv
 from PIL import Image
-import requests
-import json
-API_KEY = os.getenv("SUNO")
-def generate_lofi_prompt(image_path):
-    load_dotenv()
-    api_key = os.getenv("GOOGLE_API_KEY")
-    if not api_key:
-        raise ValueError("Missing GOOGLE_API_KEY")
+import google.generativeai as genai
 
-    genai.configure(api_key=api_key)
+load_dotenv()   # ← load .env once at import
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
+SUNO_API_KEY   = os.getenv("SUNO")
+BASE_URL       = "https://api.sunoapi.org/api"
+STYLE          = "Classical"
+MODEL          = "V3_5"
 
-    if not os.path.exists(image_path):
+
+if not GOOGLE_API_KEY or not SUNO_API_KEY:
+    sys.exit("ERROR: Missing GOOGLE_API_KEY or SUNO in your environment")
+
+genai.configure(api_key=GOOGLE_API_KEY)
+
+def generate_lofi_prompt(image_path: str) -> dict:
+    if not os.path.isfile(image_path):
         raise FileNotFoundError(f"{image_path} not found")
-
-    try:
-        img = Image.open(image_path)
-        prompt = (
-            "Describe this image for creating prompt for a music. It should include its emotion, "
-            "the people, and the surroundings to generate the prompt in maximum of 200 words without any comments or suggestions."
-        )
-        model = genai.GenerativeModel('gemini-1.5-flash')
-        response = model.generate_content([prompt, img])
-        print(response.text)
-        
-        # Call Suno API
-        url = "https://api.sunoapi.org/api/v1/generate"
-        payload = json.dumps({
-            "prompt": f"{response.text}",
-            "style": "Classical",
-            "title": "Peaceful Piano Meditation",
-            "customMode": True,
-            "instrumental": True,
-            "model": "V3_5",
-            "negativeTags": "Heavy Metal, Upbeat Drums",
-            "callBackUrl":'https://api.example.com/callback'
-        })
-        print(payload)
-        headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {os.getenv("SUNO")}'  # Replace with real token
-        }
-
-        suno_response = requests.post(url, headers=headers, data=payload)
-        
-        # Return structured JSON response
-        while True:
-            status_resp = requests.get(f"{BASE_URL}/v1/music/status/{task_id}", headers=headers)
-            status_resp.raise_for_status()
-            status_data = status_resp.json()
-
-            status = status_data.get("status")
-            if status == "completed":
-                audio_url = status_data["result"]["audio_url"]
-                print("✅ Completed! Audio URL:", audio_url)
-                break
-            elif status == "failed":
-                error = status_data.get("error", "Unknown reason")
-                print("❌ Failed:", error)
-                break
-            else:
-                print(f"⏳ Current status: {status}")
-                time.sleep(5)  # adjust as needed
+    
+    img = Image.open(image_path)
+    prompt_text = (
+        "Describe this image for creating a music prompt. "
+        "Include its emotion, the people, and the surroundings, "
+        "in no more than 200 words, without comments or suggestions."
+    )
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    desc_resp = model.generate_content([prompt_text, img])
+    music_prompt = desc_resp.text.strip()
+    print("🔍 Generated image description prompt:\n", music_prompt)
 
 
-        result = {
-            "success": True,
-            "prompt": response.text,
-            "audioResponse": suno_response.json() if suno_response.headers.get('content-type', '').startswith('application/json') else suno_response.text,
-            "audioUrl": None  # Extract from suno_response based on API docs
-        }
-        print(result)
-        return json.dumps(result)
-        
-    except Exception as e:
-        error_result = {
-            "success": False,
-            "error": str(e)
-        }
-        return json.dumps(error_result)
+    payload = {
+        "prompt": music_prompt,
+        "style": STYLE,
+        "title": "Peaceful Piano Meditation",
+        "customMode": True,
+        "instrumental": True,
+        "model": MODEL,
+        "negativeTags": "Heavy Metal, Upbeat Drums"
+    }
+    headers = {
+        "Authorization": f"Bearer {SUNO_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    post_url = f"{BASE_URL}/v1/generate"
+    resp = requests.post(post_url, headers=headers, json=payload)
+    resp.raise_for_status()
+
+    data = resp.json()
+    task_id = data.get("taskId") or data.get("id")
+    if not task_id:
+        raise RuntimeError(f"No task ID in response: {data}")
+
+    status_url = f"{BASE_URL}/v1/music/status/{task_id}"
+    while True:
+        time.sleep(5)
+        st = requests.get(status_url, headers=headers)
+        st.raise_for_status()
+        st_data = st.json()
+        status = st_data.get("status")
+        print(f"⏳ Status: {status}")
+        if status == "completed":
+            audio_url = st_data["result"]["audio_url"]
+            print("✅ Completed! Audio URL:", audio_url)
+            return {
+                "success": True,
+                "prompt": music_prompt,
+                "audioUrl": audio_url
+            }
+        elif status == "failed":
+            err = st_data.get("error", "Unknown")
+            print("❌ Generation failed:", err)
+            return {"success": False, "error": err}
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        error_result = {
+        print(json.dumps({
             "success": False,
             "error": "Usage: python generate_lofi.py <image_path>"
-        }
-        print(json.dumps(error_result))
+        }))
         sys.exit(1)
-    
-    image_path = sys.argv[1]
-    result = generate_lofi_prompt(image_path)
-    print(result)
+
+    result = generate_lofi_prompt(sys.argv[1])
+    print(json.dumps(result, indent=2))
