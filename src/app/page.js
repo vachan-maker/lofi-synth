@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import Image from "next/image";
 import Hero from "./components/Hero";
+import Header from "./components/Header";
 export default function Home() {
   const [msg, setMsg] = useState('');
   useEffect(() => {
