@@ -7,6 +7,7 @@ import Hero from "./components/Hero";
 import Header from './components/Header';
 import ReactRain from 'react-rain-animation';
 import HowItWorks from './components/HowItWorks';
+import ChooseYourVibe from './components/ChooseYourVibe';
 
 
 export default function Home() {
