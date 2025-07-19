@@ -10,6 +10,10 @@ export default function Home() {
       .then(res => res.json())
       .then(data => setMsg(data.message));
   }, []);
-  return (<Hero/>
+  return (
+    <>
+  <Header/>
+  <Hero/>
+  </>
   );
 }
