@@ -1,36 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🎧 lofi-synth 🎵  
+_Transforming vibes with AI: from raw tracks to smooth lofi_
 
-## Getting Started
+## 🏆 Hackathon Project
 
-First, run the development server:
+**lofi-synth** is an AI-powered full-stack application built using **Next.js**, **Django**, and **Suno AI** that transforms regular music into calming lofi versions. It also leverages **emotion detection from images** to generate personalized music, and even creates entirely new lofi tracks from custom prompts.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Features
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 🎶 Song-to-Lofi Transformation
+Upload any song, and we’ll convert it into a smooth, relaxing lofi version using **Suno AI's generative audio API**.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 🖼️ Emotion-Based Music Generation
+Upload an image → We detect the emotion in the image using **AI models** → We generate a matching lofi track based on that emotion (e.g., sad, chill, happy vibes).
 
-## Learn More
+### 📝 Prompt-to-Music
+Type a text prompt like "a rainy night in Tokyo" → Get a custom-generated lofi audio based on the vibe and mood described.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🌐 Frontend
+- **Next.js** (React-based framework)
+- Tailwind CSS for styling
 
-## Deploy on Vercel
+### 🧠 Backend
+- **Django** REST Framework
+- Custom APIs to handle uploads and manage user data
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 🤖 AI/ML Integration
+- **Suno AI** for generative music synthesis
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+
