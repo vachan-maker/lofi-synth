@@ -9,8 +9,15 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
 from pathlib import Path
+from dotenv import load_dotenv
+load_dotenv()
+from pathlib import Path
+import os
+BASE_DIR = Path(__file__).resolve().parent.parent
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -72,7 +79,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'lof.wsgi.application'
-
+LOGIN_REDIRECT_URL = '/'  # or 'home' if you're using named routes
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
