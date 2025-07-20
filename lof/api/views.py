@@ -24,3 +24,20 @@ def upload_image(request):
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
     return JsonResponse({'success': False, 'error': 'Invalid request'}, status=405)
+
+
+def music_callback(request):
+    print("hai")
+
+
+
+
+
+
+
+
+
+
+
+
+
