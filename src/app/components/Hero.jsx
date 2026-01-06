@@ -1,26 +1,29 @@
+import React from "react";
 import { Music, ArrowRight } from "lucide-react";
-import { Icon } from "lucide-react";
 import { motion } from "framer-motion";
-export default function Hero() {
+
+const animationVariants = {
+    initial: { opacity: 0, y: 50 },
+    animate: { opacity: 1, y: 0 }
+};
+
+function Hero() {
     return (
         <div className="min-h-1/2 transition-colors">
             <section className="container mx-auto px-8 py-20 text-center max-w-5xl">
-                <div class="top-60 left-5 w-20 h-10 bg-gradient-to-r from-pink-400 to-purple-400 rounded-md z-50 opacity-40 rotate-10 animate-bounce"></div>
-                <div class="fixed bottom-10 right-5 w-20 h-10 bg-gradient-to-r from-pink-400 to-purple-400 rounded-md z-50 opacity-40 rotate-5 animate-bounce"></div>
+                <div className="top-60 left-5 w-20 h-10 bg-gradient-to-r from-pink-400 to-purple-400 rounded-md z-50 opacity-40 rotate-10 animate-bounce"></div>
+                <div className="fixed bottom-10 right-5 w-20 h-10 bg-gradient-to-r from-pink-400 to-purple-400 rounded-md z-50 opacity-40 rotate-5 animate-bounce"></div>
                 <motion.h1
-                    initial={{ opacity: 0, y: 50 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    variants={animationVariants}
+                    initial="initial"
+                    animate="animate"
                     transition={{ duration: 0.8 }}
-
                     className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-pink-600 to-indigo-600 bg-clip-text text-transparent leading-tight"
-                    style={{ opacity: 1, transform: "none" }}
                 >
                     Turn Any Song into
                     <div className="relative">
                         Chill Lo-Fi Magic
-                       
                     </div>
-
                 </motion.h1>
                 <p className="text-3xl text-gray-600">Upload your track. Choose your vibe. Let AI remix it instantly.</p>
                 <form className="flex flex-row justify-center px-4 mt-5 gap-4">
@@ -44,6 +47,7 @@ export default function Hero() {
                         <button 
                             type="submit" 
                             className="cursor-pointer absolute top-1/2 right-2 transform -translate-y-1/2 w-10 h-10 flex items-center justify-center text-white bg-purple-500 rounded-full hover:bg-purple-600 transition-colors"
+                            aria-label="Submit"
                         >
                             <ArrowRight className="w-6 h-6" />
                         </button>
@@ -54,3 +58,5 @@ export default function Hero() {
         </div>
     );
 }
+
+export default React.memo(Hero);

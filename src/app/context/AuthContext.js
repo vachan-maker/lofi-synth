@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback, useMemo } from 'react';
 
 const AuthContext = createContext(null);
 
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    const loginAction = async (data) => {
+    const loginAction = useCallback(async (data) => {
         try {
             const response = await fetch('http://127.0.0.1:8000/api/auth/', {
                 method: 'POST',
@@ -58,23 +58,25 @@ export const AuthProvider = ({ children }) => {
             console.error('Login error:', err);
             return { success: false, error: err.message || 'Network error occurred' };
         }
-    };
+    }, []);
 
-    const logOut = () => {
+    const logOut = useCallback(() => {
         setUser(null);
         setToken(null);
         localStorage.removeItem('authToken');
         localStorage.removeItem('userData');
-    };
+    }, []);
+
+    const contextValue = useMemo(() => ({ 
+        token, 
+        user: isClient ? user : null,
+        loginAction, 
+        logOut, 
+        loading: loading || !isClient
+    }), [token, user, isClient, loginAction, logOut, loading]);
 
     return (
-        <AuthContext.Provider value={{ 
-            token, 
-            user: isClient ? user : null,
-            loginAction, 
-            logOut, 
-            loading: loading || !isClient
-        }}>
+        <AuthContext.Provider value={contextValue}>
             {children}
         </AuthContext.Provider>
     );

@@ -1,8 +1,9 @@
 "use client";
+import React from "react";
 import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
 
-export default function Header() {
+function Header() {
     const { user, logOut, loading } = useAuth();
 
     return (
@@ -37,3 +38,5 @@ export default function Header() {
         </header>
     );
 }
+
+export default React.memo(Header);
