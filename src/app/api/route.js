@@ -2,9 +2,9 @@
 import { NextResponse } from "next/server";
 import { v2 as cloudinary } from 'cloudinary';
 import { spawn } from 'child_process';
-import { writeFile } from 'fs/promises';
+import { writeFile, unlink, mkdir } from 'fs/promises';
+import { existsSync } from 'fs';
 import path from 'path';
-import fs from 'fs';
 
 cloudinary.config({
   cloud_name: 'dvsxwxcjq',
@@ -12,7 +12,12 @@ cloudinary.config({
   api_secret: process.env.SECRET_KEY,
 });
 
+const PYTHON_TIMEOUT = 60000; // 60 seconds
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
 export async function POST(request) {
+  let tempFilePath = null;
+  
   try {
     const formData = await request.formData();
     const file = formData.get('file');
@@ -21,36 +26,40 @@ export async function POST(request) {
       return NextResponse.json({ error: "No file received." }, { status: 400 });
     }
 
-    // Convert file to buffer and save locally for Python processing
+    // Validate file size
     const bytes = await file.arrayBuffer();
+    if (bytes.byteLength > MAX_FILE_SIZE) {
+      return NextResponse.json({ 
+        error: `File too large. Maximum size is ${MAX_FILE_SIZE / 1024 / 1024}MB` 
+      }, { status: 400 });
+    }
+
     const buffer = Buffer.from(bytes);
     
-    // Save file temporarily for Python script
+    // Ensure temp directory exists
     const tempDir = path.join(process.cwd(), 'temp');
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true });
+    if (!existsSync(tempDir)) {
+      await mkdir(tempDir, { recursive: true });
     }
     
-    const tempFilename = `${Date.now()}-${file.name}`;
-    const tempFilePath = path.join(tempDir, tempFilename);
+    // Save file temporarily for Python script
+    const tempFilename = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+    tempFilePath = path.join(tempDir, tempFilename);
     await writeFile(tempFilePath, buffer);
 
-    // Upload to Cloudinary (optional, for storage)
-    const uploadResult = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream(
-        { resource_type: "auto", folder: "uploads" },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      ).end(buffer);
-    });
-
-    // Process with Python script
-    const audioResult = await processPythonScript(tempFilePath);
-    
-    // Clean up temp file
-    fs.unlinkSync(tempFilePath);
+    // Upload to Cloudinary in parallel with Python processing
+    const [uploadResult, audioResult] = await Promise.all([
+      new Promise((resolve, reject) => {
+        cloudinary.uploader.upload_stream(
+          { resource_type: "auto", folder: "uploads" },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        ).end(buffer);
+      }),
+      processPythonScript(tempFilePath)
+    ]);
 
     return NextResponse.json({
       message: "Processing complete",
@@ -65,18 +74,28 @@ export async function POST(request) {
       error: "Processing failed", 
       details: error.message 
     }, { status: 500 });
+  } finally {
+    // Clean up temp file
+    if (tempFilePath) {
+      try {
+        await unlink(tempFilePath);
+      } catch (cleanupError) {
+        console.error('Failed to cleanup temp file:', cleanupError);
+      }
+    }
   }
 }
 
 function processPythonScript(imagePath) {
   return new Promise((resolve, reject) => {
     const pythonProcess = spawn('python', [
-      path.join(process.cwd(), 'scripts/generate_lofi.py'), 
+      path.join(process.cwd(), 'lof/api/utils.py'), 
       imagePath
     ]);
     
     let dataString = '';
     let errorString = '';
+    let timeoutId = null;
     
     pythonProcess.stdout.on('data', (data) => {
       dataString += data.toString();
@@ -87,17 +106,24 @@ function processPythonScript(imagePath) {
     });
     
     pythonProcess.on('close', (code) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      
       if (code === 0) {
         resolve(dataString.trim());
       } else {
-        reject(new Error(`Python script failed: ${errorString}`));
+        reject(new Error(`Python script failed with code ${code}: ${errorString}`));
       }
     });
     
+    pythonProcess.on('error', (error) => {
+      if (timeoutId) clearTimeout(timeoutId);
+      reject(new Error(`Failed to start Python process: ${error.message}`));
+    });
+    
     // Set timeout to prevent hanging
-    setTimeout(() => {
-      pythonProcess.kill();
+    timeoutId = setTimeout(() => {
+      pythonProcess.kill('SIGTERM');
       reject(new Error('Python script timeout'));
-    }, 60000); // 60 second timeout
+    }, PYTHON_TIMEOUT);
   });
 }

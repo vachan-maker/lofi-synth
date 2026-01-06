@@ -1,6 +1,9 @@
 "use client";
 import { Cloud, Upload, X, Download } from "lucide-react";
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
+
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+const ACCEPTED_IMAGE_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
 
 export default function ImageUpload() {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -10,39 +13,55 @@ export default function ImageUpload() {
     const [result, setResult] = useState(null);
     const fileInputRef = useRef(null);
 
-    const handleFileSelect = (file) => {
-        if (file && file.type.startsWith('image/')) {
-            setSelectedFile(file);
-            setError(null);
-            setResult(null); // Clear previous results
-        } else {
-            setError('Please select a valid image file');
+    const validateFile = useCallback((file) => {
+        if (!file) {
+            return 'Please select a file';
         }
-    };
+        if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+            return 'Please select a valid image file (JPEG, PNG, GIF, or WebP)';
+        }
+        if (file.size > MAX_FILE_SIZE) {
+            return `File size must be less than ${MAX_FILE_SIZE / 1024 / 1024}MB`;
+        }
+        return null;
+    }, []);
 
-    const handleFileChange = (e) => {
+    const handleFileSelect = useCallback((file) => {
+        const validationError = validateFile(file);
+        if (validationError) {
+            setError(validationError);
+            setSelectedFile(null);
+            return;
+        }
+        
+        setSelectedFile(file);
+        setError(null);
+        setResult(null);
+    }, [validateFile]);
+
+    const handleFileChange = useCallback((e) => {
         const file = e.target.files[0];
         handleFileSelect(file);
-    };
+    }, [handleFileSelect]);
 
-    const handleDragOver = (e) => {
+    const handleDragOver = useCallback((e) => {
         e.preventDefault();
         setIsDragOver(true);
-    };
+    }, []);
 
-    const handleDragLeave = (e) => {
+    const handleDragLeave = useCallback((e) => {
         e.preventDefault();
         setIsDragOver(false);
-    };
+    }, []);
 
-    const handleDrop = (e) => {
+    const handleDrop = useCallback((e) => {
         e.preventDefault();
         setIsDragOver(false);
         const file = e.dataTransfer.files[0];
         handleFileSelect(file);
-    };
+    }, [handleFileSelect]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
         
         if (!selectedFile) {
@@ -61,7 +80,6 @@ export default function ImageUpload() {
                 body: formData,
             });
 
-            // Debug: Check what we're actually getting
             const contentType = response.headers.get('content-type');
             if (!contentType || !contentType.includes('application/json')) {
                 const text = await response.text();
@@ -84,20 +102,18 @@ export default function ImageUpload() {
         } finally {
             setIsUploading(false);
         }
-    };
+    }, [selectedFile]);
 
-    const handleDownload = async () => {
+    const handleDownload = useCallback(async () => {
         if (!result?.audioData) {
             setError('No audio data available for download');
             return;
         }
 
         try {
-            // Parse the audio result to extract download info
             const audioInfo = JSON.parse(result.audioData);
             
             if (audioInfo.audioUrl) {
-                // Direct download from URL
                 const link = document.createElement('a');
                 link.href = audioInfo.audioUrl;
                 link.download = 'generated-lofi-music.mp3';
@@ -111,7 +127,12 @@ export default function ImageUpload() {
             console.error('Download error:', error);
             setError('Failed to download audio file');
         }
-    };
+    }, [result]);
+
+    const clearFile = useCallback(() => {
+        setSelectedFile(null);
+        setResult(null);
+    }, []);
 
     return (
         <div className="py-20">
@@ -139,11 +160,9 @@ export default function ImageUpload() {
                                 </p>
                                 <button
                                     type="button"
-                                    onClick={() => {
-                                        setSelectedFile(null);
-                                        setResult(null);
-                                    }}
+                                    onClick={clearFile}
                                     className="mt-2 text-red-500 hover:text-red-700"
+                                    aria-label="Remove file"
                                 >
                                     <X size={20} />
                                 </button>
@@ -152,6 +171,7 @@ export default function ImageUpload() {
                             <div className="mb-4">
                                 <p className="text-gray-600 mb-2">Drag & drop an image here</p>
                                 <p className="text-sm text-gray-400">or</p>
+                                <p className="text-xs text-gray-400 mt-2">Max size: 10MB</p>
                             </div>
                         )}
 
@@ -159,7 +179,7 @@ export default function ImageUpload() {
                             ref={fileInputRef}
                             type="file"
                             className="hidden"
-                            accept="image/*"
+                            accept={ACCEPTED_IMAGE_TYPES.join(',')}
                             onChange={handleFileChange}
                         />
                         
